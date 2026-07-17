@@ -26,7 +26,6 @@ selected_states = st.sidebar.multiselect(
 
 #Title for the dashboard
 st.title("Car Crashes Dashboard")
-st.dataframe(df)
 
 #KPI cards
 col1, col2, col3 = st.columns(3)
@@ -46,3 +45,14 @@ col3.metric(
     round(df['speeding'].mean()), "%"
 )
 
+st.dataframe(df)
+
+col1, col2 = st.columns(2)
+with  col1:
+    fig = px.bar(df.sort_values('total', ascending=False), x='State', y="total",color="total", color_continuous_scale="Viridis", template="plotly_dark", title=f"Total Car Crashes by State")
+    st.plotly_chart(fig)
+
+with col2:
+    fig = px.pie(df, values= 'speeding', names='total', template="plotly_dark",color_discrete_sequence=px.colors.sequential.Viridis, title=f"Total Car Crashes by State")
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    st.plotly_chart(fig)
