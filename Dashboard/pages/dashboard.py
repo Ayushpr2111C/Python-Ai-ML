@@ -1,11 +1,14 @@
+from matplotlib.pylab import f
 from pandas import col
 import streamlit as st
 import seaborn as sns
 import pandas as pd
 import plotly.express as px
 
-#page configuration
+#Title for the dashboard
+st.title("Car Crashes Dashboard")
 
+#page configuration
 st.set_page_config(
     page_title= "Car Crashes Dashboard",
     page_icon= "🏎️",
@@ -24,28 +27,50 @@ selected_states = st.sidebar.multiselect(
     default=df["State"].unique()
 )
 
-#Title for the dashboard
-st.title("Car Crashes Dashboard")
+try: 
+    filtered_df = df[df["State"].isin(selected_states)]
 
-#KPI cards
-col1, col2, col3 = st.columns(3)
+    #KPI cards
+    col1, col2, col3 = st.columns(3)
 
-col1.metric(
-    "Average Total Crashes", 
-    round(df['total'].mean()),"%"
-)
+    col1.metric(
+        "Average Total Crashes", 
+        round(filtered_df['total'].mean()),"%"
+    )
 
-col2.metric(
-    "Average Alcohol Crashes",
-    round(df['alcohol'].mean()),"%"
-)
+    col2.metric(
+        "Average Alcohol Crashes",
+        round(filtered_df['alcohol'].mean()),"%"
+    )
 
-col3.metric(
-    "Average Speeding Crashes",
-    round(df['speeding'].mean()), "%"
-)
+    col3.metric(
+        "Average Speeding Crashes",
+        round(filtered_df['speeding'].mean()), "%"
+    )
 
-st.dataframe(df)
+    st.dataframe(filtered_df)
+
+except:
+    #KPI cards
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric(
+        "Average Total Crashes", 
+        round(df['total'].mean()),"%"
+    )
+
+    col2.metric(
+        "Average Alcohol Crashes",
+        round(df['alcohol'].mean()),"%"
+    )
+
+    col3.metric(
+        "Average Speeding Crashes",
+        round(df['speeding'].mean()),"%"
+    )
+
+    st.dataframe(df)
+
 
 col1, col2 = st.columns(2)
 with  col1:
